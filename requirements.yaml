@@ -1,0 +1,6 @@
+frontend:
+  - mediapipe==
+  - opencv-python==
+  
+backend: 
+  - 

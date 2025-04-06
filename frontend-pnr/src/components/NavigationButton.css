@@ -1,0 +1,18 @@
+.navigation-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: linear-gradient(45deg, #6600ff, #3333ff);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.navigation-button:hover {
+    background: linear-gradient(45deg, #5500cc, #2222cc);
+    transform: scale(1.05);
+}
