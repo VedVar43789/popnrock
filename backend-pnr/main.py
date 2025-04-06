@@ -15,6 +15,7 @@ import joblib
 import random
 from starlette.websockets import WebSocketDisconnect
 from FER import get_artist_name
+import requests
 
 app = FastAPI()
 
@@ -64,6 +65,19 @@ def determine_intensity(confidence: float):
         return "MEDIUM"
     else:
         return "HIGH"
+
+SPOTIFY_CLIENT_ID = "c5fb4cf906ec46e489d376e76a945139"
+SPOTIFY_CLIENT_SECRET = "8670d9d25ec24a82a939e0b73806f52d"
+
+@app.get("/api/spotify/token")
+def get_spotify_token():
+    auth_url = "https://accounts.spotify.com/api/token"
+    response = requests.post(
+        auth_url,
+        data={"grant_type": "client_credentials"},
+        headers={"Authorization": f"Basic {SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"}
+    )
+    return response.json()
 
 @app.websocket("/ws/livefeed")
 async def websocket_endpoint(websocket: WebSocket):

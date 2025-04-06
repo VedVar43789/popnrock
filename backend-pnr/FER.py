@@ -50,15 +50,6 @@ def get_artist_name():
 
             name_counts[name] += 1
 
-            # Draw box and name
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, f"Looks like: {name}, Gender: {gender}", (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-
-        cv2.imshow("Celebrity Matcher (InsightFace)", frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
     cap.release()
     cv2.destroyAllWindows()
 
