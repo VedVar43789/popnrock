@@ -1,50 +1,368 @@
-body {
-    background-color: #1a001a;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: white;
-    text-align: center;
-  }
-  
-  .neon-text {
-    text-shadow: 0 0 5px #fff, 0 0 10px #ff00ff, 0 0 15px #ff00ff, 0 0 20px #ff00ff;
-    font-size: 2rem;
-    color: #ff00ff;
-  }
-  
-  .video-container {
-    border: 6px solid #ff00ff;
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 0 20px #ff00ff, 0 0 40px #5500ff;
-    background: rgba(0, 0, 0, 0.6);
-  }
-  
-  .video-container img {
-    width: 800px;
-    height: 500px;
-    border: 4px solid #00ffff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px #00ffff;
-  }
-  
-  .waiting-text {
-    color: #00ffff;
-    font-size: 1.5rem;
-    text-shadow: 0 0 5px #fff, 0 0 10px #00ffff;
-  }
-  
-  .live-feed-container {
-    display: flex;
+/* Global resets and layout */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+}
+
+/* Wrapper layout */
+.live-feed-wrapper {
+  display: flex;
+  height: 100vh;
+  gap: 24px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Left panel: Live video */
+.left-panel {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right panel: Stats + Music */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Card base style */
+.card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Video container styling */
+.video-container {
+  flex: 1;
+  background-color: #e8ebef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  border: 2px dashed #ccc;
+  min-height: 300px;
+}
+
+.video-container img,
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #09f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Status message */
+.status-message {
+  text-align: center;
+  margin-bottom: 15px;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  color: #555;
+}
+
+/* Typography enhancements */
+.header-text {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.card h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* Workout header */
+.workout-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.workout-title {
+  color: #6600ff;
+  margin-bottom: 5px;
+}
+
+.workout-match {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Exercise details */
+.exercise-detail {
+  display: flex;
+  margin: 8px 0;
+  font-size: 1.1rem;
+}
+
+.label {
+  font-weight: 500;
+  min-width: 130px;
+  color: #555;
+}
+
+.value {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Exercise stats list */
+.exercise-stats {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.exercise-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.exercise-count {
+  font-weight: 600;
+  color: #09f;
+  margin: 0 8px;
+}
+
+.exercise-details {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Music player */
+.music-title {
+  color: #1DB954;
+}
+
+.music-details {
+  margin-bottom: 20px;
+}
+
+.music-info {
+  margin: 5px 0;
+}
+
+.music-label {
+  font-weight: 500;
+  min-width: 70px;
+  display: inline-block;
+  color: #555;
+}
+
+.music-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.spotify-play-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.spotify-play-button:hover {
+  background-color: #18a649;
+  transform: translateY(-2px);
+}
+
+.spotify-player-wrapper {
+  margin-top: 15px;
+}
+
+/* Navigation buttons */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.home-button, .fer-button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.home-button {
+  background-color: #333;
+  color: white;
+}
+
+.fer-button {
+  background: linear-gradient(45deg, #ff00ff, #7928ca);
+  color: white;
+}
+
+.home-button:hover, .fer-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* No workout data state */
+.no-workout-data {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.get-workout-button {
+  background: linear-gradient(45deg, #ff00ff, #7928ca);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.get-workout-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Wait text */
+.waiting-text {
+  color: #777;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 1100px) {
+  .live-feed-wrapper {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #2a003d 0%, #000020 100%);
   }
-  
+
+  .left-panel, .right-panel {
+    flex: none;
+    width: 100%;
+  }
+
+  .video-container {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .live-feed-wrapper {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
   .header-text {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 8px #ff00ff, 0 0 12px #5500ff;
+    font-size: 1.6rem;
+  }
+}
+/* Add these styles to your LiveFeed.css file */
+
+/* Exercise Demo Video Container */
+.demo-video-container {
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.demo-video-container h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* Video styling */
+.demo-video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 240px;
+  object-fit: contain;
+  background-color: #f0f0f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .demo-video {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .demo-video-container {
+    margin-top: 16px;
+    padding: 12px;
   }
   
+  .demo-video {
+    max-height: 180px;
+  }
+}

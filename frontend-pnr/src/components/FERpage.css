@@ -1,0 +1,128 @@
+/* Add a subtle background grid */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+    background: radial-gradient(circle, rgba(240,240,240,0.6) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-color: #f8f8f8; /* Keep the light base */
+}
+
+
+/* Header */
+.header-text {
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+/* Layout Container */
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Left Panel - Intensity Dropdown */
+.left-panel {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Intensity Card */
+.intensity-card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    width: 160px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Intensity Title */
+.intensity-card h3 {
+    color: #444;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+/* Intensity Dropdown */
+.intensity-dropdown {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fafafa;
+    color: #333;
+    border: 1px solid #ddd;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Dropdown Hover & Focus */
+.intensity-dropdown:hover,
+.intensity-dropdown:focus {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+/* Center Panel - Video Feed */
+.video-container {
+    flex: 2;
+    width: 640px;
+    height: 480px;
+    background: white;
+    border-radius: 16px;
+    border: 2px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Right Panel - Buttons */
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+/* Navigation Button */
+.navigation-button {
+    padding: 12px 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #ff7a18, #ff3c00);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.2);
+}
+
+/* Button Hover */
+.navigation-button:hover {
+    background: linear-gradient(45deg, #ff3c00, #c12700);
+    box-shadow: 0px 6px 15px rgba(255, 60, 0, 0.3);
+}
+
+
+.video-feed {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: 12px;
+}

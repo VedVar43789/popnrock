@@ -1,72 +1,67 @@
 import cv2
 import joblib
 import numpy as np
-#import insightface
 import time
 from collections import defaultdict
 from sklearn.metrics.pairwise import cosine_similarity
 
+def get_artist_name():
 # Start webcam
-cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)
 
-model = joblib.load('model.pickle')
+    model = joblib.load('model.pickle')
+    model.prepare(ctx_id=0)
+    celeb_embeddings_female = joblib.load('cef.pickle')
+    celeb_embeddings_male = joblib.load('cem.pickle')
+    celeb_names_female = joblib.load('cnf.pickle')
+    celeb_names_male = joblib.load('cnm.pickle')
 
-model.prepare(ctx_id=0)
+    start_time = time.time()
+    name_counts = defaultdict(int)
 
-celeb_embeddings_female = joblib.load('cef.pickle')
-celeb_embeddings_male = joblib.load('cem.pickle')
-celeb_names_female = joblib.load('cnf.pickle')
-celeb_names_male = joblib.load('cnm.pickle')
+    while True:
+        current_time = time.time()
+        if current_time - start_time > 5:
+            break
 
-start_time = time.time()
-name_counts = defaultdict(int)
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-while True:
-    current_time = time.time()
-    if current_time - start_time > 5:
-        break
+        faces = model.get(frame)
 
-    ret, frame = cap.read()
-    if not ret:
-        break
+        for face in faces:
+            gender = "Male" if face.gender == 1 else "Female"
 
-    faces = model.get(frame)
+            (x1, y1, x2, y2) = face.bbox.astype(int)
+            emb = face.embedding
+            face_vector = emb.reshape(1, -1)
 
-    for face in faces:
-        gender = "Male" if face.gender == 1 else "Female"
+            if gender == "Male":
+                all_vectors = np.array(celeb_embeddings_male)
+                similarities = cosine_similarity(face_vector, all_vectors)[0]
+                best_idx = np.argmax(similarities)
+                name = celeb_names_male[best_idx]
+            else:
+                all_vectors = np.array(celeb_embeddings_female)
+                similarities = cosine_similarity(face_vector, all_vectors)[0]
+                best_idx = np.argmax(similarities)
+                name = celeb_names_female[best_idx]
 
-        (x1, y1, x2, y2) = face.bbox.astype(int)
-        emb = face.embedding
-        face_vector = emb.reshape(1, -1)
+            name_counts[name] += 1
 
-        if gender == "Male":
-            all_vectors = np.array(celeb_embeddings_male)
-            similarities = cosine_similarity(face_vector, all_vectors)[0]
-            best_idx = np.argmax(similarities)
-            name = celeb_names_male[best_idx]
-        else:
-            all_vectors = np.array(celeb_embeddings_female)
-            similarities = cosine_similarity(face_vector, all_vectors)[0]
-            best_idx = np.argmax(similarities)
-            name = celeb_names_female[best_idx]
+            # Draw box and name
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(frame, f"Looks like: {name}, Gender: {gender}", (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
-        name_counts[name] += 1
+        cv2.imshow("Celebrity Matcher (InsightFace)", frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-        # Draw box and name
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(frame, f"Looks like: {name}, Gender: {gender}", (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cap.release()
+    cv2.destroyAllWindows()
 
-    cv2.imshow("Celebrity Matcher (InsightFace)", frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
-
-# Get the most frequent name
-if name_counts:
     most_frequent_name = max(name_counts, key=name_counts.get)
-    print("Most frequent name in 5 seconds:", most_frequent_name)
-else:
-    print("No faces detected.")
+    return most_frequent_name
+

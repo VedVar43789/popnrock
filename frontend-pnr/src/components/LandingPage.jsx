@@ -210,12 +210,13 @@ const LandingPage = () => {
     }
   };
 
-  const initializeAudioAndNavigate = () => {
+  // Changed this to navigate to "/fer" instead of "/livefeed"
+  const navigateToFER = () => {
     if (!audioInitialized) {
       console.log('Audio initialized');
       setAudioInitialized(true);
     }
-    navigate('/livefeed');
+    navigate('/fer');
   };
 
   return (
@@ -246,7 +247,7 @@ const LandingPage = () => {
           }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
-          onClick={initializeAudioAndNavigate}
+          onClick={navigateToFER} // Changed to navigateToFER
         >
           <img
             src={isHovering ? letsgo : popOff}

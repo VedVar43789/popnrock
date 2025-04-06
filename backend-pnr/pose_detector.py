@@ -571,14 +571,22 @@ def create_workout_with_mapper(artist, intensity):
     
     Args:
         artist (str): Artist name to use for generating the workout
-        intensity (str): Workout intensity level ("LOW", "MED", or "HIGH")
+        intensity (str): Workout intensity level ("LOW", "MEDIUM", or "HIGH")
         
     Returns:
         tuple: (time_intervals, exercises) - Lists of time intervals and corresponding exercises
     """
+    # Normalize intensity value to match what SongWorkoutMapper expects
+    if intensity.upper() == "MEDIUM":
+        normalized_intensity = "MED"
+    else:
+        normalized_intensity = intensity.upper()
+    
+    print(f"Creating workout for artist: {artist}, intensity: {normalized_intensity}")
+    
     try:
         # Create a SongWorkoutMapper instance
-        mapper = SongWorkoutMapper(artist, intensity)
+        mapper = SongWorkoutMapper(artist, normalized_intensity)
         
         # Generate time intervals and exercises
         time_intervals = mapper.create_dance_sections()
@@ -587,7 +595,9 @@ def create_workout_with_mapper(artist, intensity):
         # Extract just the exercise names from the workout pairs
         exercises = [exercise for exercise, _ in workout_pairs]
         
+        print(f"Successfully created workout for {artist} with {len(exercises)} exercises")
         return time_intervals, exercises
+    
     except Exception as e:
         print(f"Error creating workout: {e}")
         # Return a default workout in case of error
