@@ -78,6 +78,7 @@ export default function LiveFeed() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        console.log("WebSocket data received:", data);
         setImageSrc(`data:image/jpeg;base64,${data.frame}`);
         setExerciseData({
           exercise: data.exercise,

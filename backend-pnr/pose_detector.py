@@ -70,13 +70,16 @@ class ExerciseDetector:
                 break
         return None
     
+    # In ExerciseDetector.get_time_remaining
     def get_time_remaining(self):
         """Get the time remaining for the current exercise in seconds."""
         elapsed = time.time() - self.start_time
         if self.current_interval >= len(self.intervals_cumulative):
+            print(f"Current interval {self.current_interval} out of range {len(self.intervals_cumulative)}")
             return 0
         
         time_remaining = self.intervals_cumulative[self.current_interval] - elapsed
+        print(f"Time remaining: {max(0, int(time_remaining))}s for exercise {self.exercises[self.current_interval] if self.current_interval < len(self.exercises) else 'None'}")
         return max(0, int(time_remaining))
     
     def get_all_counters(self):
